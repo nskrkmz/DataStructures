@@ -1,26 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//Öðrencileri Verilerinin Tamamý
+//Ã–grenci verilerinin tamami
 int indexs[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
 int studentNumbers[] = {18060311, 20060045, 
-					   19061091, 20060134, 
-					   20060678, 18061086, 
-					   20060032, 20060067, 
-					   19060456, 18060245, 
-					   20060110, 20060234, 
-					   20060141, 20060011, 20060012 };
+			19061091, 20060134, 
+			20060678, 18061086, 
+		   	20060032, 20060067, 
+		  	19060456, 18060245, 
+			20060110, 20060234, 
+			20060141, 20060011, 20060012 };
 int examGrades[] = {40, 50, 75, 90, 40, 75, 50, 60, 60, 75, 40, 90, 60, 50, 60};
 
-//öðrenci verilerini tutacak yapý
+//Ã¶grenci verilerini tutacak yapi
 struct data {
 	int index; 		
 	int studentNumber;	
 	int examGrade; 		
-	struct data *nextStudent ; //Verileri göre sýralama yaparken kullanýlcak
+	struct data *nextStudent ; //Verileri gÃ¶re sÃ½ralama yaparken kullanilcak
 	struct data *preStudent ; //	""			   ""				""
 };
-typedef struct data Student ; //Source code da ifade kolaylýðý saðlamak için yapýldý
+typedef struct data Student ; //Source code da ifade kolayligi saglamak icin 
 
 void ekle (Student ** startIndexTable, int index, int studentNumber, int examGrade);
 void sil ();
@@ -53,7 +53,7 @@ int main (void) {
 void ekle (Student ** startIndexTable, int index, int studentNumber, int examGrade){
 	Student*newStudent = (Student*)malloc(sizeof(Student));
 	if (newStudent == NULL){
-		printf("Yeni öðrenci için yer ayrýlamadý.(Bellek dolu olabilir!!!)");
+		printf("Yeni Ã¶grenci icin yer ayrilamadi.(Bellek dolu olabilir!!!)");
 		exit(EXIT_FAILURE);
 	}
 	else{
@@ -87,7 +87,7 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 					(*startIndexTable)= newStudent ;
 				}
 			}
-			else{ //	(newStudent->examGrade < currentStudent->examGrade)--------þartýna denk geliyor
+			else{ //	(newStudent->examGrade < currentStudent->examGrade)--------sartina denk geliyor
 				while ((currentStudent->examGrade) <= (newStudent->examGrade)){
 					currentStudent = currentStudent->nextStudent ;
 				}
@@ -127,7 +127,7 @@ int degistir(){
 
 void yazdir(Student * startIndexTable){
 	if(startIndexTable == NULL){
-		printf("Index tablosuna veri giriþi yapýlmamýþ!!!");
+		printf("Index tablosuna veri giriÃ¾i yapÃ½lmamÃ½Ã¾!!!");
 	}
 	else{
 		Student* currentStudent = startIndexTable;
@@ -136,7 +136,7 @@ void yazdir(Student * startIndexTable){
 			currentStudent = currentStudent->nextStudent ;
 		}
 	}
-}//yazdir() sonu  problemsiz çalýþýyor
+}//yazdir() sonu  problemsiz calisiyor
 
 
 
