@@ -42,9 +42,9 @@ int main (void) {
 	ekle (&startIndexTable, indexs[9],  studentNumbers[9] ,  examGrades[9]);
 	ekle (&startIndexTable, indexs[10], studentNumbers[10] , examGrades[10]);
 	ekle (&startIndexTable, indexs[11], studentNumbers[11] , examGrades[11]);
-	ekle (&startIndexTable, indexs[12], studentNumbers[12] , examGrades[12]);
-	ekle (&startIndexTable, indexs[13], studentNumbers[13] , examGrades[13]);
-	ekle (&startIndexTable, indexs[14], studentNumbers[14] , examGrades[14]);
+	//ekle (&startIndexTable, indexs[12], studentNumbers[12] , examGrades[12]);
+	//ekle (&startIndexTable, indexs[13], studentNumbers[13] , examGrades[13]);
+	//ekle (&startIndexTable, indexs[14], studentNumbers[14] , examGrades[14]);
 	
 	
 	yazdir( startIndexTable ); // beklenen : 3,11,9,5,2,8,14,7,12,13,6,1,0,10,4
@@ -53,7 +53,7 @@ int main (void) {
 void ekle (Student ** startIndexTable, int index, int studentNumber, int examGrade){
 	Student*newStudent = (Student*)malloc(sizeof(Student));
 	if (newStudent == NULL){
-		printf("Yeni ögrenci icin yer ayrilamadi.(Bellek dolu olabilir!!!)");
+		printf("Yeni ogrenci icin yer ayrilamadi.(Bellek dolu olabilir!!!)");
 		exit(EXIT_FAILURE);
 	}
 	else{
@@ -82,18 +82,55 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 					(*startIndexTable) = newStudent ;
 				}
 				else{
-					newStudent->nextStudent = currentStudent;
-					currentStudent->preStudent = newStudent;
-					(*startIndexTable)= newStudent ;
+					Student* tutucu = currentStudent->nextStudent ;
+					
+					currentStudent->nextStudent = newStudent ;
+					newStudent->preStudent = currentStudent;
+					tutucu->preStudent = newStudent ;
+					newStudent->nextStudent = tutucu;
+					
+					//newStudent->nextStudent = currentStudent;
+					//currentStudent->preStudent = newStudent;
+					//(*startIndexTable)= newStudent ;
 				}
 			}
 			else{ //	(newStudent->examGrade < currentStudent->examGrade)--------sartina denk geliyor
-				while ((currentStudent->examGrade) <= (newStudent->examGrade)){
+				while ((currentStudent->examGrade) > (newStudent->examGrade)){
 					currentStudent = currentStudent->nextStudent ;
 				}
 				if((currentStudent->nextStudent)== NULL){
 					currentStudent->nextStudent = newStudent ;
 					newStudent->preStudent = currentStudent ;
+				}
+				
+				else if ((currentStudent->examGrade)==(newStudent->examGrade)){
+					
+					
+					
+					if((currentStudent->studentNumber) < (newStudent->studentNumber)){
+						Student* tutucu = currentStudent->nextStudent ;
+						
+						currentStudent->nextStudent=newStudent ;
+						newStudent->preStudent = currentStudent ;
+						newStudent->nextStudent = tutucu ;
+						tutucu->preStudent = newStudent ;
+					}
+					else {
+						Student* tutucu = currentStudent->preStudent ;
+						
+						currentStudent->preStudent = newStudent ;
+						newStudent->nextStudent = currentStudent ;
+						tutucu->nextStudent = newStudent ;
+						newStudent->preStudent = tutucu ;
+					}
+				}
+				else if ((newStudent->examGrade) > (currentStudent->examGrade)){
+					Student* tutucu = currentStudent->preStudent ;
+						
+					currentStudent->preStudent = newStudent ;
+					newStudent->nextStudent = currentStudent ;
+					tutucu->nextStudent = newStudent ;
+					newStudent->preStudent = tutucu ;
 				}
 				else{
 					Student* tutucu = currentStudent->nextStudent ;
