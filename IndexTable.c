@@ -1,3 +1,12 @@
+/*
+*	30.10.2020
+*	Abdullah Enes Korkmaz
+*	18061263
+*	enes.korkmaz@bil.omu.edu.tr
+*/
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -30,6 +39,7 @@ void yazdir (startIndexTable);
 int main (void) {
 	Student * startIndexTable = NULL;
 	
+	//__dongu kullanilabilirdi girdilerin net görünmesi için bu şekilde kodlamayı tercih ettim__
 	ekle (&startIndexTable, indexs[0],  studentNumbers[0] ,  examGrades[0]);
 	ekle (&startIndexTable, indexs[1],  studentNumbers[1] ,  examGrades[1]);
 	ekle (&startIndexTable, indexs[2],  studentNumbers[2] ,  examGrades[2]);
@@ -42,9 +52,9 @@ int main (void) {
 	ekle (&startIndexTable, indexs[9],  studentNumbers[9] ,  examGrades[9]);
 	ekle (&startIndexTable, indexs[10], studentNumbers[10] , examGrades[10]);
 	ekle (&startIndexTable, indexs[11], studentNumbers[11] , examGrades[11]);
-	//ekle (&startIndexTable, indexs[12], studentNumbers[12] , examGrades[12]);
-	//ekle (&startIndexTable, indexs[13], studentNumbers[13] , examGrades[13]);
-	//ekle (&startIndexTable, indexs[14], studentNumbers[14] , examGrades[14]);
+	ekle (&startIndexTable, indexs[12], studentNumbers[12] , examGrades[12]);
+	ekle (&startIndexTable, indexs[13], studentNumbers[13] , examGrades[13]);
+	ekle (&startIndexTable, indexs[14], studentNumbers[14] , examGrades[14]); 
 	
 	
 	yazdir( startIndexTable ); // beklenen : 3,11,9,5,2,8,14,7,12,13,6,1,0,10,4
@@ -52,11 +62,13 @@ int main (void) {
 
 void ekle (Student ** startIndexTable, int index, int studentNumber, int examGrade){
 	Student*newStudent = (Student*)malloc(sizeof(Student));
-	if (newStudent == NULL){
+	if (newStudent == NULL){ // |yeni veri icin yer ayrılamadi
 		printf("Yeni ogrenci icin yer ayrilamadi.(Bellek dolu olabilir!!!)");
 		exit(EXIT_FAILURE);
 	}
-	else{
+	else{ // |yeni veri için yer ayrılabildi
+	
+		//ekle() fonksiyonuna verilen parametreler eşleştiriliyor 
 		newStudent->nextStudent = NULL ;
 		newStudent->preStudent = NULL ;
 		newStudent->index = index ;
@@ -65,16 +77,17 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 		
 		Student *currentStudent = (*startIndexTable);
 		
-		if(currentStudent == NULL){
+		if(currentStudent == NULL){ // | |Tabloya daha önce hiç veri yüklenmemiş senaryosu
 			(*startIndexTable) = newStudent;
 		}
-		else {
-			if ((newStudent->examGrade) > (currentStudent->examGrade)){
+		else {// | |tabloya daha önce veri girişi yapılmış, yeni veri için uygun yer sorgulanacak
+			
+			if ((newStudent->examGrade) > (currentStudent->examGrade)){ // | | |yeni eklenen veri en büyük examGrade'e sahipse
 				currentStudent->preStudent = newStudent ;
 				newStudent->nextStudent = currentStudent ;
 				(*startIndexTable) = newStudent ;
 			}
-			else if((newStudent->examGrade) == (currentStudent->examGrade)){
+			else if((newStudent->examGrade) == (currentStudent->examGrade)){ // | | |yeni eklenen veri ile ilk veri aynı examGrade'e sahipse
 				
 				if ((newStudent->studentNumber) < (currentStudent->studentNumber)){
 					currentStudent->preStudent = newStudent ;
@@ -94,7 +107,7 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 					//(*startIndexTable)= newStudent ;
 				}
 			}
-			else{ //	(newStudent->examGrade < currentStudent->examGrade)--------sartina denk geliyor
+			else{ // | | |yeni eklenen veri'nin examGrade i ilk veriden daha küçükse
 				while ((currentStudent->examGrade) > (newStudent->examGrade)){
 					currentStudent = currentStudent->nextStudent ;
 				}
@@ -105,24 +118,50 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 				
 				else if ((currentStudent->examGrade)==(newStudent->examGrade)){
 					
+					if(((currentStudent->nextStudent)->examGrade)==(newStudent->examGrade)&(((currentStudent->nextStudent)->studentNumber)<(newStudent->studentNumber))){
+						currentStudent=currentStudent->nextStudent;
+						if((currentStudent->studentNumber) < (newStudent->studentNumber)){
+							Student* tutucu = currentStudent->nextStudent ;
+						
+							currentStudent->nextStudent=newStudent ;
+							newStudent->preStudent = currentStudent ;
+							newStudent->nextStudent = tutucu ;
+							tutucu->preStudent = newStudent ;
+						}
+						else {
+							Student* tutucu = currentStudent->preStudent ;
+						
+							currentStudent->preStudent = newStudent ;
+							newStudent->nextStudent = currentStudent ;
+							tutucu->nextStudent = newStudent ;
+							newStudent->preStudent = tutucu ;
+						}	
+						
+					}
+					
+					else{
+						if((currentStudent->studentNumber) < (newStudent->studentNumber)){
+							Student* tutucu = currentStudent->nextStudent ;
+						
+							currentStudent->nextStudent=newStudent ;
+							newStudent->preStudent = currentStudent ;
+							newStudent->nextStudent = tutucu ;
+							tutucu->preStudent = newStudent ;
+						}
+						else {
+							Student* tutucu = currentStudent->preStudent ;
+						
+							currentStudent->preStudent = newStudent ;
+							newStudent->nextStudent = currentStudent ;
+							tutucu->nextStudent = newStudent ;
+							newStudent->preStudent = tutucu ;
+						}
+						
+					}
 					
 					
-					if((currentStudent->studentNumber) < (newStudent->studentNumber)){
-						Student* tutucu = currentStudent->nextStudent ;
-						
-						currentStudent->nextStudent=newStudent ;
-						newStudent->preStudent = currentStudent ;
-						newStudent->nextStudent = tutucu ;
-						tutucu->preStudent = newStudent ;
-					}
-					else {
-						Student* tutucu = currentStudent->preStudent ;
-						
-						currentStudent->preStudent = newStudent ;
-						newStudent->nextStudent = currentStudent ;
-						tutucu->nextStudent = newStudent ;
-						newStudent->preStudent = tutucu ;
-					}
+					
+					
 				}
 				else if ((newStudent->examGrade) > (currentStudent->examGrade)){
 					Student* tutucu = currentStudent->preStudent ;
@@ -158,13 +197,13 @@ void sil () {
 
 int degistir(){
 	
-	
+	//içerisinde sil() mothodu çağirilicak
 	
 }//degistir() sonu
 
 void yazdir(Student * startIndexTable){
 	if(startIndexTable == NULL){
-		printf("Index tablosuna veri giriÃ¾i yapÃ½lmamÃ½Ã¾!!!");
+		printf("Index tablosuna veri girisi yapilmadi!!!");
 	}
 	else{
 		Student* currentStudent = startIndexTable;
