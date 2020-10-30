@@ -32,7 +32,7 @@ struct data {
 typedef struct data Student ; //Source code da ifade kolayligi saglamak icin 
 
 void ekle (Student ** startIndexTable, int index, int studentNumber, int examGrade);
-void sil ();
+void sil (Student ** startIndexTable, int _index);
 int  degistir();
 void yazdir (startIndexTable);
 
@@ -58,6 +58,11 @@ int main (void) {
 	
 	
 	yazdir( startIndexTable ); // beklenen : 3,11,9,5,2,8,14,7,12,13,6,1,0,10,4
+	
+	sil(startIndexTable , 3);
+	printf("\n");
+	
+	yazdir(startIndexTable);
 }
 
 void ekle (Student ** startIndexTable, int index, int studentNumber, int examGrade){
@@ -77,7 +82,7 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 		
 		Student *currentStudent = (*startIndexTable);
 		
-		if(currentStudent == NULL){ // | |Tabloya daha önce hiç veri yüklenmemiþ senaryosu
+		if(currentStudent == NULL){ // | |Tabloya daha önce hiç veri yüklenmemiþ ise
 			(*startIndexTable) = newStudent;
 		}
 		else {// | |tabloya daha önce veri giriþi yapýlmýþ, yeni veri için uygun yer sorgulanacak
@@ -102,9 +107,7 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 					tutucu->preStudent = newStudent ;
 					newStudent->nextStudent = tutucu;
 					
-					//newStudent->nextStudent = currentStudent;
-					//currentStudent->preStudent = newStudent;
-					//(*startIndexTable)= newStudent ;
+					
 				}
 			}
 			else{ // | | |yeni eklenen veri'nin examGrade i ilk veriden daha küçükse
@@ -179,8 +182,7 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 					newStudent->nextStudent = tutucu ;
 					tutucu->preStudent = newStudent ;
 				}
-				//currentStudent->nextStudent = newStudent ;
-				//newStudent->preStudent = currentStudent ;
+			
 				
 			}
 		}
@@ -189,7 +191,32 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 	
 
 
-void sil () {
+void sil (Student ** startIndexTable, int _index) {
+	Student* tutucu =startIndexTable;
+	
+	while((tutucu->index)!=_index){
+		tutucu = tutucu->nextStudent;
+	}
+	
+	if ((tutucu->preStudent)==NULL){ // En baþtaki veri silinecekse
+		(tutucu->nextStudent)->preStudent = NULL ;
+		(*startIndexTable)= tutucu->nextStudent ;
+		//free(tutucu) ;
+	}
+	else if ((tutucu->nextStudent)==NULL){ //En sondaki veri silinecekse
+		(tutucu->preStudent)->nextStudent = NULL ;
+		//free(tutucu) ;
+		
+	}
+	
+	else {
+		
+		(tutucu->preStudent)->nextStudent = tutucu->nextStudent ;
+		(tutucu->nextStudent)->preStudent = tutucu->preStudent ;
+		//free(tutucu);
+		
+	}
+	
 	
 	
 	
