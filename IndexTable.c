@@ -94,12 +94,12 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 			}
 			else if((newStudent->examGrade) == (currentStudent->examGrade)){ // | | |yeni eklenen veri ile ilk veri aynı examGrade'e sahipse
 				
-				if ((newStudent->studentNumber) < (currentStudent->studentNumber)){
+				if ((newStudent->studentNumber) < (currentStudent->studentNumber)){ // ||||yeni eklenen verinin studentnumber i ilk veriden küçükse
 					currentStudent->preStudent = newStudent ;
 					newStudent->nextStudent = currentStudent ;
 					(*startIndexTable) = newStudent ;
 				}
-				else{
+				else{ //||||yeni eklenen verinin student number i daha büyükse
 					Student* tutucu = currentStudent->nextStudent ;
 					
 					currentStudent->nextStudent = newStudent ;
@@ -111,16 +111,17 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 				}
 			}
 			else{ // | | |yeni eklenen veri'nin examGrade i ilk veriden daha küçükse
-				while ((currentStudent->examGrade) > (newStudent->examGrade)){
+				while ((currentStudent->examGrade) > (newStudent->examGrade)){ //veri için uygun yeri bul
 					currentStudent = currentStudent->nextStudent ;
 				}
-				if((currentStudent->nextStudent)== NULL){
+				if((currentStudent->nextStudent)== NULL){ // bulunan yer indexTable ın sonu ise
 					currentStudent->nextStudent = newStudent ;
 					newStudent->preStudent = currentStudent ;
 				}
 				
-				else if ((currentStudent->examGrade)==(newStudent->examGrade)){
-					
+				else if ((currentStudent->examGrade)==(newStudent->examGrade)){ // bulunan yer ile examGrade leri ayni ise
+				
+					//bulunan yer ile daha sağındaki veri ile de examGrade i ayni ise	
 					if(((currentStudent->nextStudent)->examGrade)==(newStudent->examGrade)&(((currentStudent->nextStudent)->studentNumber)<(newStudent->studentNumber))){
 						currentStudent=currentStudent->nextStudent;
 						if((currentStudent->studentNumber) < (newStudent->studentNumber)){
@@ -199,9 +200,14 @@ void sil (Student ** startIndexTable, int _index) {
 	}
 	
 	if ((tutucu->preStudent)==NULL){ // En baştaki veri silinecekse
+		//tutucu= tutucu->nextStudent;
+		//tutucu->preStudent = NULL;
+		//(*startIndexTable)= tutucu;
+		//startIndexTable->preStudent =NULL;
 		(tutucu->nextStudent)->preStudent = NULL ;
-		(*startIndexTable)= tutucu->nextStudent ;
-		//free(tutucu) ;
+		tutucu = tutucu->nextStudent;
+		(*startIndexTable)= tutucu ;
+		//free(*startIndexTable) ;
 	}
 	else if ((tutucu->nextStudent)==NULL){ //En sondaki veri silinecekse
 		(tutucu->preStudent)->nextStudent = NULL ;
