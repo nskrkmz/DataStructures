@@ -33,7 +33,7 @@ typedef struct data Student ; //Source code da ifade kolayligi saglamak icin
 
 void ekle (Student ** startIndexTable, int index, int studentNumber, int examGrade);
 void sil (Student ** startIndexTable, int _index);
-int  degistir();
+int  degistir(Student ** startIndexTable , int _index , int _examGrade);
 void yazdir (startIndexTable);
 
 int main (void) {
@@ -61,7 +61,9 @@ int main (void) {
 	
 	sil(startIndexTable , 3);
 	printf("\n");
+	yazdir(startIndexTable);
 	
+	degistir(startIndexTable,11,10);
 	yazdir(startIndexTable);
 }
 
@@ -228,9 +230,21 @@ void sil (Student ** startIndexTable, int _index) {
 	
 }// sil() sonu
 
-int degistir(){
+int degistir(Student ** startIndexTable , int _index , int _examGrade){
 	
-	//içerisinde sil() mothodu çaðirilicak
+	Student * tutucu = (*startIndexTable) ;
+	while ((tutucu->index)!= _index) {
+		tutucu = tutucu->nextStudent ;
+	}
+	
+	sil(startIndexTable,(tutucu->index));
+	
+	tutucu->examGrade = _examGrade ;
+	
+	ekle(startIndexTable,(tutucu->index),(tutucu->studentNumber),_examGrade);
+	
+	
+	
 	
 }//degistir() sonu
 
