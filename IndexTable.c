@@ -1,5 +1,5 @@
 /*
-*	30.10.2020
+*	03.11.2020
 *	Abdullah Enes Korkmaz
 *	18061263
 *	enes.korkmaz@bil.omu.edu.tr
@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//Ã–grenci verilerinin tamami
+//Ogrenci verilerinin tamami
 int indexs[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
 int studentNumbers[] = {18060311, 20060045, 
 			19061091, 20060134, 
@@ -21,19 +21,19 @@ int studentNumbers[] = {18060311, 20060045,
 			20060141, 20060011, 20060012 };
 int examGrades[] = {40, 50, 75, 90, 40, 75, 50, 60, 60, 75, 40, 90, 60, 50, 60};
 
-//Ã¶grenci verilerini tutacak yapi
+//Ogrenci verilerini tutacak yapi
 struct data {
 	int index; 		
 	int studentNumber;	
 	int examGrade; 		
-	struct data *nextStudent ; //Verileri gÃ¶re sÃ½ralama yaparken kullanilcak
+	struct data *nextStudent ; //Verileri ore siralama yaparken kullanilcak
 	struct data *preStudent ; //	""			   ""				""
 };
 typedef struct data Student ; //Source code da ifade kolayligi saglamak icin 
 
 void ekle (Student ** startIndexTable, int index, int studentNumber, int examGrade);
 void sil (Student ** startIndexTable, int _index);
-int  degistir(Student ** startIndexTable , int _index , int _examGrade);
+//int  degistir(Student ** startIndexTable , int _index , int _examGrade); // bug ý çözemedim hocam 
 void yazdir (startIndexTable);
 
 int main (void) {
@@ -57,14 +57,15 @@ int main (void) {
 	ekle (&startIndexTable, indexs[14], studentNumbers[14] , examGrades[14]); 
 	
 	
-	yazdir( startIndexTable ); // beklenen : 3,11,9,5,2,8,14,7,12,13,6,1,0,10,4
+	yazdir( startIndexTable ); // beklenen : null-3,11,9,5,2,8,14,7,12,13,6,1,0,10,4-null
 	
-	sil(startIndexTable , 3);
-	printf("\n");
-	yazdir(startIndexTable);
+	// 5 indisli veriyi sil 
+	//sil(startIndexTable , 5); 
+	//printf("\n"); 
+	//yazdir(startIndexTable);
 	
-	degistir(startIndexTable,11,10);
-	yazdir(startIndexTable);
+	
+	
 }
 
 void ekle (Student ** startIndexTable, int index, int studentNumber, int examGrade){
@@ -196,20 +197,36 @@ void ekle (Student ** startIndexTable, int index, int studentNumber, int examGra
 
 void sil (Student ** startIndexTable, int _index) {
 	Student* tutucu =startIndexTable;
+	//Student* silici = (Student*)malloc(sizeof(Student));
 	
 	while((tutucu->index)!=_index){
 		tutucu = tutucu->nextStudent;
 	}
 	
 	if ((tutucu->preStudent)==NULL){ // En baþtaki veri silinecekse
+		
+		//startIndexTable  = startIndexTable->nextStudent;
+		
+		tutucu = tutucu->nextStudent;
+		tutucu->preStudent = NULL ;
+		(*startIndexTable)=tutucu ;
+		//tutucu->preStudent = NULL ;
+		
+		//free(tutucu);
+		//printf("\n");
+		//yazdir(startIndexTable);
+		
+		
 		//tutucu= tutucu->nextStudent;
 		//tutucu->preStudent = NULL;
 		//(*startIndexTable)= tutucu;
 		//startIndexTable->preStudent =NULL;
-		(tutucu->nextStudent)->preStudent = NULL ;
-		tutucu = tutucu->nextStudent;
-		(*startIndexTable)= tutucu ;
+		
+		//(tutucu->nextStudent)->preStudent = NULL ;
+		//tutucu = tutucu->nextStudent;
+		//(*startIndexTable)= tutucu ;
 		//free(*startIndexTable) ;
+		//(*startIndexTable) = newStudent;
 	}
 	else if ((tutucu->nextStudent)==NULL){ //En sondaki veri silinecekse
 		(tutucu->preStudent)->nextStudent = NULL ;
@@ -217,7 +234,7 @@ void sil (Student ** startIndexTable, int _index) {
 		
 	}
 	
-	else {
+	else { //aralarda bulunan bir veri silinecekse
 		
 		(tutucu->preStudent)->nextStudent = tutucu->nextStudent ;
 		(tutucu->nextStudent)->preStudent = tutucu->preStudent ;
@@ -230,23 +247,54 @@ void sil (Student ** startIndexTable, int _index) {
 	
 }// sil() sonu
 
-int degistir(Student ** startIndexTable , int _index , int _examGrade){
+/* int degistir(Student ** startIndexTable , int _index , int _examGrade){
 	
-	Student * tutucu = (*startIndexTable) ;
-	while ((tutucu->index)!= _index) {
-		tutucu = tutucu->nextStudent ;
+	Student* tutucu =startIndexTable;
+	//Student* silici = (Student*)malloc(sizeof(Student));
+	
+	while((tutucu->index)!=_index){
+		tutucu = tutucu->nextStudent;
 	}
 	
-	sil(startIndexTable,(tutucu->index));
+	if ((tutucu->preStudent)==NULL){ 
+		
+		
+		
+		tutucu = tutucu->nextStudent;
+		tutucu->preStudent = NULL ;
+		(*startIndexTable)=tutucu ;
+		tutucu->nextStudent = NULL ;
+		tutucu->preStudent = NULL ;
+		tutucu->examGrade = _examGrade ;
+		ekle(&startIndexTable,_index,(tutucu->studentNumber),_examGrade);
+		
+		
+	else if((tutucu->nextStudent)== NULL){ 
 	
-	tutucu->examGrade = _examGrade ;
+		(tutucu->preStudent)->nextStudent = NULL ;
+		tutucu->nextStudent = NULL ;
+		tutucu->preStudent = NULL ;
+		tutucu->examGrade = _examGrade ;
+		ekle(&startIndexTable,_index,(tutucu->studentNumber),_examGrade);
+		//free(tutucu) ;
+	}
 	
-	ekle(startIndexTable,(tutucu->index),(tutucu->studentNumber),_examGrade);
+	else { //aralarda bulunan bir veri silinecekse
+		
+		(tutucu->preStudent)->nextStudent = tutucu->nextStudent ;
+		(tutucu->nextStudent)->preStudent = tutucu->preStudent ;
+		tutucu->nextStudent = NULL ;
+		tutucu->preStudent = NULL ;
+		tutucu->examGrade = _examGrade ;
+		ekle(&startIndexTable,_index,(tutucu->studentNumber),_examGrade);
+		//free(tutucu);
+		
+	}
 	
 	
 	
 	
-}//degistir() sonu
+}//degistir() sonu */
 
 void yazdir(Student * startIndexTable){
 	if(startIndexTable == NULL){
