@@ -5,6 +5,7 @@
 struct musteri {
 	char * isim ;
 	int tutar ;
+	struct musteri*next ;
 };
 
 typedef struct musteri Musteri ;
@@ -15,7 +16,6 @@ void ekleAd();
 void ekleFatura();
 void yazdirAd();
 void yazdirTutar();
-
 char isimler[] = {"Ahmet","Bilal","Cemal","Adem","Yasin","Esin","Emel","Mustafa","Ayten","Ceylan","Nesrin","Bekir","Emin","Hakan","Hatice"};
 int tutarlar[] = {100,1000,600,650,350,270,410,750,600,1000,900,850,790,610,550};
 
@@ -46,7 +46,14 @@ int main (void){
 }// main() func. sonu
 
 void ekleListe(){
-	Musteri* yeni =[]
+	Musteri* yeni =(Musteri*)malloc(sizeof(Musteri));
+	if(yeni ==NULL){
+		printf("yer yok...\n");
+		exit(EXIT_FAILURE);
+	}
+	else{
+		yeni->
+	}
 	
 }//musteri ad ve fatura tutarını içeren listeyi oluşturacak
 
