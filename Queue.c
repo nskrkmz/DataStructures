@@ -31,16 +31,16 @@ int main (void) {
 	//push Student to stack
 	
 	//popStudent from Stack 
-	printf("\nPop Students from stack\n");
-	popStudent( &headofStack, temporaryStudent);
-	printStack( headofStack );
-	printf("Removed student from stack --> Number: %-6d Name:%-s\n", (*temporaryStudent).studentNumber, temporaryStudent->studentName);
+	//printf("\nPop Students from stack\n");
+	//popStudent( &headofStack, temporaryStudent);
+	//printStack( headofStack );
+	//printf("Removed student from stack --> Number: %-6d Name:%-s\n", (*temporaryStudent).studentNumber, temporaryStudent->studentName);
 	//popStudent from Stack
 	
 	//popStudent from Stack 
-	popStudent( &headofStack, temporaryStudent);
-	printStack( headofStack );
-	printf("Removed student from stack --> Number: %-6d Name:%-s\n", (*temporaryStudent).studentNumber, temporaryStudent->studentName);
+	//popStudent( &headofStack, temporaryStudent);
+	//printStack( headofStack );
+	//printf("Removed student from stack --> Number: %-6d Name:%-s\n", (*temporaryStudent).studentNumber, temporaryStudent->studentName);
 	//popStudent from Stack
 		 	
 	return 0;
